@@ -93,16 +93,16 @@ First solution:
 Let's take [1,2,3,4,5] as an example.
 
 After the 1st pass,
-- fromBegin = [1,1*1,2*1*1,3*2*1*1,4*3*2*1]
-- fromEnd = [1,5*1,4*5*1,3*4*5*1,2*3*4*5*1]
+- fromBegin = [1,1x1,2x1x1,3x2x1x1,4x3x2x1]
+- fromEnd = [1,5x1,4x5x1,3x4x5x1,2x3x4x5x1]
 Notice they are kind of like mirror images of one another, i.e. each vector contains half the product needed. Therefore, in order to construct the result vector, we have to combine the fromBegin and fromEnd vectors like so:
 
-result[i] = fromBegin[i]*fromEnd[n-1-i];
+result[i] = fromBegin[i]xfromEnd[n-1-i];
 
 More specifically,
-- result[0] = fromBegin[0]*fromEnd[5-1-0] = (1) * (2*3*4*5*1) = 2*3*4*5 -> product of all elements except 1
-- result[1] = fromBegin[1]*fromEnd[5-1-1] = (1*1) * (3*4*5*1) = 1*3*4*5 -> product of all elements except 2
-- result[2] = fromBegin[2]*fromEnd[5-1-2] = (2*1*1) * (4*5*1) = 1*2*4*5 -> product of all elements except 3
+- result[0] = fromBegin[0]xfromEnd[5-1-0] = (1) x (2x3x4x5x1) = 2x3x4x5 -> product of all elements except 1
+- result[1] = fromBegin[1]xfromEnd[5-1-1] = (1x1) * (3x4x5x1) = 1x3x4x5 -> product of all elements except 2
+- result[2] = fromBegin[2]xfromEnd[5-1-2] = (2x1x1) * (4x5x1) = 1x2x4x5 -> product of all elements except 3
 
 ...
 
@@ -113,20 +113,20 @@ If we look at how we calculated the `result` vector from `fromBegin` and `fromEn
 More specifically, following the example with [1,2,3,4,5], we can first initialize fromBegin and fromEnd as 1, and result as [1,1,1,1,1], then:
 
 In the first iteration,
-- fromBegin = 1*1
-- fromEnd = 5*1
+- fromBegin = 1x1
+- fromEnd = 5x1
 
 At this instance, fromBegin can already be multiplied into result[1] and fromEnd can already be multiplied into result[5-1-1].
 
 In the second iteration,
-- fromBegin = 1*1*2
-- fromEnd = 4*5*1
+- fromBegin = 1x1x2
+- fromEnd = 4x5x1
 
 At this instance, fromBegin can already be multiplied into result[2] and fromEnd can already be multiplied into result[5-1-2].
 
 After the first pass, all values in result are ready except the first and the last ones. Right now, 
-- fromBegin = 1*1*2*3*4
-- fromEnd = 2*3*4*5*1
+- fromBegin = 1x1x2x3x4
+- fromEnd = 2x3x4x5x1
 
 Meaning fromBegin is exactly the value of result[4] and fromEnd is exactly the value of result[0]! Therefore, we can simply:
 ```
